@@ -8,16 +8,17 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <h1>Restaurants in Nieuwegein - 0.1</h1>
+    <h1>Restaurants in Nieuwegein - 0.2</h1>
     <aside>
         <div>
             <ul class="list-group" data-bind="foreach: locationList">
                 <li class="list-group-item" data-bind="click: $parent.selectedFromList">
-                    <div data-bind="text: name"></div>
+                    <div id="name" data-bind="text: name"></div>
                 </li>
             </ul>
         </div>
     </aside>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
     <script src="js/restaurants.js"></script>
 </body>

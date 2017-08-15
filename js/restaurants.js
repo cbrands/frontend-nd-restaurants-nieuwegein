@@ -43,10 +43,9 @@ let ViewModel = function () {
 
     }
 
-    this.selectItem = function(selectedId) {
+    this.selectItem = function(selectedName) {
         for(let i = 0; i < self.numberOfLocations; i++){
-            console.log(self.locationList()[i]);
-            if (i === selectedId){
+            if (self.locationList()[i].name === selectedName){
                 self.locationList()[i].selected = true;
             } else {
                 self.locationList()[i].selected = false;
@@ -55,18 +54,23 @@ let ViewModel = function () {
     }
     
     this.selectedFromList = function(item) {
-        console.log(item.id);
-        console.log(item.name);
-        self.selectItem(item.id);
+        self.selectItem(item.name);
+        self.highlightSelectedItem(item.name);
 
-
-        for(let i = 0; i < self.numberOfLocations; i++){
-            console.log("blagh");
-            console.log(self.locationList()[i].name, self.locationList()[i].selected);
-        }
     }
     
-    //this.highlightSelectedItem = function(selectedName)
+    this.highlightSelectedItem = function(selectedName) {
+        let listItems = $(".list-group-item");
+        listItems.each(function( index ) {
+            if($(this).hasClass("active")){
+                $(this).removeClass("active");
+            }
+            if($(this).children("#name").text() === selectedName){
+                console.log(selectedName);
+                $(this).addClass("active");
+            }
+        });
+    }
     
     init();
 }
