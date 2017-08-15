@@ -31,17 +31,38 @@ let Location = (data) => {
 
 let ViewModel = function () {
     let self = this;
+    
     this.numberOfLocations = locations.length;
     
     this.locationList = ko.observableArray([]);
+    
     this.query = ko.observable("");
+    
+    this.map;
+    
+    this.locationNieuwegein = {lat: 52.02917, lng: 5.08056};
+    
     let init = function() {
         locations.forEach((location) => {
             self.locationList.push(location);
         })
-
+        self.createMap();
     }
 
+    this.createMap = function() {
+//        geocoder = new google.maps.Geocoder();
+//        this.map = new google.maps.Map(document.getElementById("map"), {
+//            center: self.locationNieuwegein,
+//            zoom: 11
+//        });
+        console.log("map");
+    let mapProp= {
+        center:new google.maps.LatLng(52.02917,5.08056),
+        zoom:12,
+    };
+    var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+    }
+    
     this.selectItem = function(selectedName) {
         for(let i = 0; i < self.numberOfLocations; i++){
             if (self.locationList()[i].name === selectedName){
