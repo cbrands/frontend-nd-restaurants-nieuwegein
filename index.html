@@ -4,14 +4,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Restaurants in Nieuwegein</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <h1>Restaurants in Nieuwegein - 0.1</h1>
     <aside>
         <div>
-            <ul data-bind="foreach: locationList">
-                <li data-bind="click: $parent.selectedFromList">
+            <ul class="list-group" data-bind="foreach: locationList">
+                <li class="list-group-item" data-bind="click: $parent.selectedFromList">
                     <div data-bind="text: name"></div>
                 </li>
             </ul>
