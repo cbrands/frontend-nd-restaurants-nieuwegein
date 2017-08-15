@@ -30,12 +30,11 @@ let Location = (data) => {
 }
 
 let ViewModel = function () {
-//let ViewModel = () => {
     let self = this;
     this.numberOfLocations = locations.length;
     
     this.locationList = ko.observableArray([]);
-
+    this.query = ko.observable("");
     let init = function() {
         locations.forEach((location) => {
             self.locationList.push(location);
@@ -65,9 +64,22 @@ let ViewModel = function () {
             if($(this).hasClass("active")){
                 $(this).removeClass("active");
             }
-            if($(this).children("#name").text() === selectedName){
-                console.log(selectedName);
+            if($(this).children(".name").text() === selectedName){
                 $(this).addClass("active");
+            }
+        });
+    }
+    
+    this.search = function() {
+        let queryLow = self.query().toLowerCase();
+        console.log(queryLow);
+        let listItems = $(".list-group-item");
+        listItems.each(function( index ) {
+            if($(this).hasClass("hidden")){
+                $(this).removeClass("hidden");
+            }
+            if($(this).children(".name").text().toLowerCase().search(queryLow) < 0) {
+                $(this).addClass("hidden");
             }
         });
     }

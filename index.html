@@ -10,10 +10,13 @@
 <body>
     <h1>Restaurants in Nieuwegein - 0.2</h1>
     <aside>
+        <div class="form-group">
+            <input class="form-control" type="text" placeholder="Search for restaurant" data-bind="textinput: query, event: {keyup:search}">
+        </div>
         <div>
             <ul class="list-group" data-bind="foreach: locationList">
                 <li class="list-group-item" data-bind="click: $parent.selectedFromList">
-                    <div id="name" data-bind="text: name"></div>
+                    <div class="name" data-bind="text: name"></div>
                 </li>
             </ul>
         </div>
