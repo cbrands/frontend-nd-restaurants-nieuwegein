@@ -36,6 +36,8 @@ let ViewModel = function () {
     
     this.restaurantList = ko.observableArray([]);
     
+    this.markerList = [];
+    
     this.query = ko.observable("");
     
     this.geocoder;
@@ -56,14 +58,17 @@ let ViewModel = function () {
     this.addMarkers = function() {
         for (let i = 0; i < self.numberOfRestaurants; i++) {
             let address = self.restaurantList()[i].address;
+            let name = self.restaurantList()[i].name;
             console.log(address);
             self.geocoder.geocode( { 'address': address}, function(results, status) {
                 if (status == 'OK') {
                     self.map.setCenter(results[0].geometry.location);
                     let marker = new google.maps.Marker({
                         map: self.map,
+                        title: name,
                         position: results[0].geometry.location
                     });
+                    self.markerList.push(marker);
                 } else {
                     console.log('Geocode was not successful for the following reason: ' + status);
                 }
@@ -108,7 +113,7 @@ let ViewModel = function () {
     }
     
     this.search = function() {
-        let queryLow = self.query().toLowerCase();
+        let queryLow = self.query().toLowerCase().trim();
         console.log(queryLow);
         let listItems = $(".list-group-item");
         listItems.each(function( index ) {
@@ -119,6 +124,13 @@ let ViewModel = function () {
                 $(this).addClass("hidden");
             }
         });
+        for(var i = 0; i < self.numberOfRestaurants; i++) {
+            if(self.markerList[i].getTitle().toLocaleLowerCase().search(queryLow) < 0) {
+                self.markerList[i].setVisible(false);
+            } else {
+                self.markerList[i].setVisible(true);
+            }
+        }
     }
     
     init();
