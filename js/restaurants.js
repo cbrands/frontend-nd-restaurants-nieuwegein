@@ -2,21 +2,21 @@ const restaurants = [
     {
         id: 0,
         name: "Jack’s Grillhouse",
-        street: "Parkhout 1, Nieuwegein, NL",
+        address: "Parkhout 1, Nieuwegein, NL",
         selected: false,
         yelp: "https://www.yelp.com/biz/jacks-grillhouse-nieuwegein-2"
     },
     {
         id: 1,
         name: "Sushi & Grill Restaurant Goya",
-        street: "Stadsplein 2E, Nieuwegein, NL",
+        address: "Stadsplein 2E, Nieuwegein, NL",
         selected: false,
         yelp: "https://www.yelp.com/biz/sushi-en-grill-restaurant-goya-nieuwegein"
     },
     {
         id: 2,
         name: "Pizza Grandi",
-        street: "Walnootgaarde 44, Nieuwegein, NL",
+        address: "Walnootgaarde 44, Nieuwegein, NL",
         selected: false,
         yelp: "https://www.yelp.com/biz/pizza-grandi-nieuwegein"
     }
@@ -38,27 +38,39 @@ let ViewModel = function () {
     
     this.query = ko.observable("");
     
-    var geocoder;
+    this.geocoder;
     
     this.map;
     
     this.locationNieuwegein = {lat: 52.02917, lng: 5.08056};
     
     let init = function() {
+        self.geocoder = new google.maps.Geocoder();
         restaurants.forEach((restaurant) => {
             self.restaurantList.push(restaurant);
         })
         self.createMap();
+        self.addMarkers();
     }
 
-    this.addMarker = function(location) {
-        let marker = new google.maps.Marker({
-          position: location,
-          label: labels[labelIndex++ % labels.length],
-          map: self.map
-        });
+    this.addMarkers = function() {
+        for (let i = 0; i < self.numberOfRestaurants; i++) {
+            let address = self.restaurantList()[i].address;
+            console.log(address);
+            self.geocoder.geocode( { 'address': address}, function(results, status) {
+                if (status == 'OK') {
+                    self.map.setCenter(results[0].geometry.location);
+                    let marker = new google.maps.Marker({
+                        map: self.map,
+                        position: results[0].geometry.location
+                    });
+                } else {
+                    console.log('Geocode was not successful for the following reason: ' + status);
+                }
+            });
+        }
     }
-    
+
     this.createMap = function() {
         let mapProp= {
             center:new google.maps.LatLng(52.02917,5.08056),
