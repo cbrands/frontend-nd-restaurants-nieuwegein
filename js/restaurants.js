@@ -75,7 +75,7 @@ let ViewModel = function () {
                     let marker = new google.maps.Marker({
                         map: self.map,
                         title: name,
-                        icon: self.pinSymbol('red'),
+                        icon: self.pinSymbol('red', 0.7),
                         position: location
                     });
 
@@ -142,9 +142,9 @@ let ViewModel = function () {
     this.highlightSelectedMarker = function(selectedName) {
         for(var i = 0; i < self.numberOfRestaurants; i++) {
             if(self.markers()[i].getTitle() === selectedName) {
-                self.markers()[i].setIcon(self.pinSymbol('blue'));
+                self.markers()[i].setIcon(self.pinSymbol('blue', 1.0));
             } else {
-                self.markers()[i].setIcon(self.pinSymbol('red'));
+                self.markers()[i].setIcon(self.pinSymbol('red', 0.7));
             }
         }
     }
@@ -180,14 +180,14 @@ let ViewModel = function () {
     
     // This function returns an svg marker icon in the color specified
     // https://stackoverflow.com/questions/40289624/change-google-map-marker-color-to-a-color-of-my-choice
-    this.pinSymbol = function(color) {
+    this.pinSymbol = function(color, scale) {
         return {
             path: 'M 0,0 C -2,-20 -10,-22 -10,-30 A 10,10 0 1,1 10,-30 C 10,-22 2,-20 0,0 z',
             fillColor: color,
             fillOpacity: 1,
             strokeColor: '#000',
             strokeWeight: 2,
-            scale: 0.7
+            scale: scale
         };
     }
     
