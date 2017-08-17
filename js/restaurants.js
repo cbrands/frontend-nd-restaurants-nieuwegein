@@ -269,7 +269,7 @@ let ViewModel = function() {
         setTimeout(function() {
             marker.setAnimation(null);
         }, 2050);
-    }
+    };
     
     // This function implements the functionality of the search box
     this.search = function() {
