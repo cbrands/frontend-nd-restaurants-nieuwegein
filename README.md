@@ -30,3 +30,8 @@ In this list you wil find 6 legitimate restaurants. Meaning valid address and ex
 You will find one nonexisting restaurant with a valid address to show that the application survives that no foursquare information is found. 
 
 Also you will find a nonexisting restaurant with a nonexisting address to show that the application will survive if google can not find an address. 
+
+### Additional tests
+If the internet, or google, or foursquare is down. The application will still stand. Naturally you will not see a map of Nieuwegein unless your browser has it in cache. But you will see a list of restaurants you can select. And if the google map of Nieuwegein is in the cache of your browser you will also see the markers.
+
+If the internet and google are online but foursquare is down the application will function completely exept for the infowindow. The infowindow will show that foursquare can not be reached.
