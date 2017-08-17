@@ -246,10 +246,7 @@ let ViewModel = function() {
             if (marker) {
                 if (marker.getTitle() === selectedName) {
                     marker.setIcon(self.pinSymbol('blue', 1.0));
-                    marker.setAnimation(google.maps.Animation.BOUNCE);
-                    setTimeout(function() {
-                        marker.setAnimation(null);
-                    }, 2050);
+                    self.addAnimation(marker);
                     infoWindow = self.restaurantList()[i].infowindow;
                     infoWindow.open(self.map, marker);
                 } else {
@@ -261,6 +258,13 @@ let ViewModel = function() {
         }
     };
 
+    this.addAnimation = function(marker) {
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+        setTimeout(function() {
+            marker.setAnimation(null);
+        }, 2050);
+    }
+    
     // This function implements the functionality of the search box
     this.search = function() {
         //First convert the query to lower case and trim the whitespaces
