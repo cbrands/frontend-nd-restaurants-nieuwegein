@@ -5,19 +5,25 @@ const restaurants = [
         id: 0,
         name: "Jack’s Grillhouse",
         address: "Parkhout 1, Nieuwegein, NL",
-        yelp: "https://www.yelp.com/biz/jacks-grillhouse-nieuwegein-2"
+        yelp: "https://www.yelp.com/biz/jacks-grillhouse-nieuwegein-2",
+        marker: "",
+        infowindow: ""
     },
     {
         id: 1,
         name: "Sushi & Grill Restaurant Goya",
         address: "Stadsplein 2E, Nieuwegein, NL",
-        yelp: "https://www.yelp.com/biz/sushi-en-grill-restaurant-goya-nieuwegein"
+        yelp: "https://www.yelp.com/biz/sushi-en-grill-restaurant-goya-nieuwegein",
+        marker: "",
+        infowindow: ""
     },
     {
         id: 2,
         name: "Pizza Grandi",
         address: "Walnootgaarde 44, Nieuwegein, NL",
-        yelp: "https://www.yelp.com/biz/pizza-grandi-nieuwegein"
+        yelp: "https://www.yelp.com/biz/pizza-grandi-nieuwegein",
+        marker: "",
+        infowindow: ""
     }
 ];
 
@@ -25,6 +31,8 @@ let Location = (data) => {
     this.id = ko.obervable(data.id);
     this.name = ko.observable(data.name);
     this.address = ko.observable(data.address);
+    this.marker = ko.observable(data.marker);
+    this.infowindow = ko.observable(data.infowindow);
 }
 
 // This function defines the viewModel. This is were most of the code lives
@@ -32,6 +40,10 @@ let Location = (data) => {
 let ViewModel = function () {
     let self = this;
 
+    this.fsUrl = 'https://api.foursquare.com/v2/venues/search?',
+    this.clientId = CLIENTID,
+    this.clientSecret = CLIENTSECRET;
+    
     this.numberOfRestaurants = restaurants.length;
 
     this.restaurantList = ko.observableArray([]);
@@ -59,7 +71,41 @@ let ViewModel = function () {
         //Create the map and fill it with the markers
         self.createMap();
         self.addMarkers();
+        
     }
+    
+    this.getVenueDetails = function(name, infoWindowCallback) {
+        foursquareUrl = self.fsUrl + '&client_id=' + self.clientId + '&client_secret=' + self.clientSecret + '&v=20161207&query=' + name +  '&ll=52.02917,5.08056';
+        $.ajax(foursquareUrl).done(function(data){
+            let venue = data.response.venues[0];
+            console.log(venue);
+            let placeName = venue.name;
+            let placeAddress = venue.location.formattedAddress;
+            let placePhonenNumber = (venue.contact.formattedPhone === undefined)? 'None': venue.contact.formattedPhone;
+            let foursquareLink = "https://foursquare.com/v/" + venue.id;
+            
+            windowContent = '<div id="iw_container"><p><strong>Name: </strong>' + placeName + '</p>' +
+                    '<p><strong>Address: </strong>  ' + placeAddress + '</p>' +
+                    '<p><strong>Phone: </strong>' + placePhonenNumber + '</p>' +
+                '<p>More info: ' + '<a href="' + foursquareLink + '" target="_blank">Click here</a></p></div>';
+            infoWindowCallback(windowContent);
+        }).fail(function(error){
+            windowContent = 'Fail to connect to Foursquare';
+        infoWindowCallback(windowContent);
+        });
+    }
+    
+    // This function adds an infowindow to a marker
+	this.addInfowindow = function(marker) {
+		let contentString = '<div id="info-window">'+
+			'</div>';
+		let infowindow = new google.maps.InfoWindow({
+			content: contentString
+		});
+		return infowindow;
+	};
+    
+    
 
     // This function loops over all the restaurants and uses the name and address of the 
     // restaurant to create a marker
@@ -85,6 +131,25 @@ let ViewModel = function () {
                     // add the marker to a markers observable array so we can easely access the marker
                     // from other functions
                     self.markers.push(marker);
+                    
+                    // Add an infowindow to the marker
+                    let anInfowindow = self.addInfowindow(marker);
+				    for(let i = 0; i < self.numberOfRestaurants; i++) {
+					   if(marker.title === self.restaurantList()[i].name) {
+						  self.restaurantList()[i].marker = marker;
+						  self.restaurantList()[i].infowindow = anInfowindow;
+					   }
+				    }
+                    
+                    self.getVenueDetails(marker.title, function(windowContent){
+                        // including content to the Info Window.
+                        anInfowindow.setContent(windowContent);
+                        console.log(anInfowindow);
+                        // opening the Info Window in the current map and at the current marker location.
+                        //anInfowindow.open(self.map, self);
+                    });
+                    
+                    
                 } else {
                     console.log('Geocode was not successful for the following reason: ' + status);
                 }
@@ -142,12 +207,17 @@ let ViewModel = function () {
     this.highlightSelectedMarker = function(selectedName) {
         for(var i = 0; i < self.numberOfRestaurants; i++) {
             let marker = self.markers()[i];
+            let infoWindow;
             if(marker.getTitle() === selectedName) {
                 marker.setIcon(self.pinSymbol('blue', 1.0));
                 marker.setAnimation(google.maps.Animation.BOUNCE);
                 setTimeout(function(){marker.setAnimation(null);}, 2050);
+				infoWindow = self.restaurantList()[i].infowindow;
+				infoWindow.open(self.map, marker);
             } else {
                 marker.setIcon(self.pinSymbol('red', 0.7));
+                infoWindow = self.restaurantList()[i].infowindow;
+				infoWindow.close(self.map, marker);
             }
         }
     }
@@ -175,6 +245,8 @@ let ViewModel = function () {
         for(var i = 0; i < self.numberOfRestaurants; i++) {
             if(self.markers()[i].getTitle().toLocaleLowerCase().search(queryLow) < 0) {
                 self.markers()[i].setVisible(false);
+                // Close the infowindow, if it is opened
+				self.restaurantList()[i].infowindow.close(self.map, self.restaurantList()[i].marker);
             } else {
                 self.markers()[i].setVisible(true);
             }
@@ -193,7 +265,7 @@ let ViewModel = function () {
             scale: scale
         };
     }
-    
+
     init();
 }
 
