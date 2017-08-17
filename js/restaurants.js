@@ -141,10 +141,13 @@ let ViewModel = function () {
     // the others are colored red
     this.highlightSelectedMarker = function(selectedName) {
         for(var i = 0; i < self.numberOfRestaurants; i++) {
-            if(self.markers()[i].getTitle() === selectedName) {
-                self.markers()[i].setIcon(self.pinSymbol('blue', 1.0));
+            let marker = self.markers()[i];
+            if(marker.getTitle() === selectedName) {
+                marker.setIcon(self.pinSymbol('blue', 1.0));
+                marker.setAnimation(google.maps.Animation.BOUNCE);
+                setTimeout(function(){marker.setAnimation(null);}, 2050);
             } else {
-                self.markers()[i].setIcon(self.pinSymbol('red', 0.7));
+                marker.setIcon(self.pinSymbol('red', 0.7));
             }
         }
     }
