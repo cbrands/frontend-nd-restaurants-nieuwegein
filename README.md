@@ -21,6 +21,7 @@ This application uses the following frameworks.
 * Google map api to show the map and place the markers. 
 * Foursquare api to retrieve additional information about the restaurant.
 * Knockout framework to organise the code in an MVVM pattern.
+* jQuery was used to to handle the &lt;li&gt; items
 
 ## Note to the grader
 This is a frontend application the "backend" consists of a hardcoded list of restaurants.
