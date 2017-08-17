@@ -150,7 +150,13 @@ let ViewModel = function() {
             let address = self.restaurantList()[i].address;
             let name = self.restaurantList()[i].name;
 
-            self.geocoder.geocode({
+            self.addMarker(address, name);
+        }
+    };
+
+    //This function adds a single marker
+    this.addMarker = function(address, name) {
+      self.geocoder.geocode({
                 'address': address
             }, function(results, status) {
                 if (status == 'OK') {
@@ -188,10 +194,9 @@ let ViewModel = function() {
                 } else {
                     console.log('Geocode was not successful for the following reason: ' + status);
                 }
-            });
-        }
+            });  
     };
-
+    
     // This function creates a clicklistener for the given marker.
     // When the user clicks on the marker the title of the marker which is
     // the name of the restaurant is extracted and used as a parameter for the 
@@ -258,6 +263,7 @@ let ViewModel = function() {
         }
     };
 
+    // This function performs an animation on selection
     this.addAnimation = function(marker) {
         marker.setAnimation(google.maps.Animation.BOUNCE);
         setTimeout(function() {
