@@ -61,7 +61,7 @@ let Location = (data) => {
     this.address = ko.observable(data.address);
     this.marker = ko.observable(data.marker);
     this.infowindow = ko.observable(data.infowindow);
-}
+};
 
 // This function defines the viewModel. This is were most of the code lives
 // The ViewModel connects the view (html) with the model above
@@ -97,13 +97,13 @@ let ViewModel = function() {
         // Fills the observable array with restaurants
         restaurants.forEach((restaurant) => {
             self.restaurantList.push(restaurant);
-        })
+        });
 
         //Create the map and fill it with the markers
         self.createMap();
         self.addMarkers();
 
-    }
+    };
 
     // This function retrieves the foursquare data for a restaurant and puts the data in an infowindow 
     this.getVenueDetails = function(name, infoWindowCallback) {
@@ -129,7 +129,7 @@ let ViewModel = function() {
             windowContent = 'Fail to connect to Foursquare';
             infoWindowCallback(windowContent);
         });
-    }
+    };
 
     // This function adds an infowindow to a marker
     this.addInfowindow = function(marker) {
@@ -190,7 +190,7 @@ let ViewModel = function() {
                 }
             });
         }
-    }
+    };
 
     // This function creates a clicklistener for the given marker.
     // When the user clicks on the marker the title of the marker which is
@@ -202,7 +202,7 @@ let ViewModel = function() {
             self.highlightSelectedItem(selectedName);
             self.highlightSelectedMarker(selectedName);
         });
-    }
+    };
 
     // This function creates the google map
     this.createMap = function() {
@@ -211,14 +211,14 @@ let ViewModel = function() {
             zoom: 12,
         };
         self.map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
-    }
+    };
 
     // This function is called when a user selects an item from the list
     // it calls the appropiate function which do the actual selecting
     this.selectedFromList = function(item) {
         self.highlightSelectedItem(item.name);
         self.highlightSelectedMarker(item.name);
-    }
+    };
 
     // This function loops over all the listItems removes the active 
     // class from the previous selected listItem and adds the active class
@@ -233,7 +233,7 @@ let ViewModel = function() {
                 $(this).addClass("active");
             }
         });
-    }
+    };
 
     // This function colors the markers
     // It loops over all the markers
@@ -259,7 +259,7 @@ let ViewModel = function() {
                 }
             }
         }
-    }
+    };
 
     // This function implements the functionality of the search box
     this.search = function() {
@@ -294,7 +294,7 @@ let ViewModel = function() {
                 }
             }
         }
-    }
+    };
 
     // This function returns an svg marker icon in the color specified
     // https://stackoverflow.com/questions/40289624/change-google-map-marker-color-to-a-color-of-my-choice
@@ -307,9 +307,9 @@ let ViewModel = function() {
             strokeWeight: 2,
             scale: scale
         };
-    }
+    };
 
     init();
-}
+};
 
 ko.applyBindings(new ViewModel());
