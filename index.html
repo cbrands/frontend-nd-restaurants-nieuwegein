@@ -8,22 +8,26 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <h1>Restaurants in Nieuwegein - 0.2</h1>
-    <section id="googleMap">
-        
-    </section>
-    <aside>
-        <div class="form-group">
-            <input class="form-control" type="text" placeholder="Search for restaurant" data-bind="textinput: query, event: {keyup:search}">
-        </div>
-        <div>
-            <ul class="list-group" data-bind="foreach: restaurantList">
-                <li class="list-group-item" data-bind="click: $parent.selectedFromList">
-                    <div class="name" data-bind="text: name"></div>
-                </li>
-            </ul>
-        </div>
-    </aside>
+    <div class="container">
+        <header class="col-md-12 text-center">
+            <h1>Restaurants in Nieuwegein</h1>
+        </header>
+    
+        <section id="googleMap" class="col-md-6 col-xs-12">
+        </section>
+        <aside class="col-md-6 col-xs-12">
+            <div class="form-group">
+                <input class="form-control" type="text" placeholder="Search for restaurant" data-bind="textinput: query, event: {keyup:search}">
+            </div>
+            <div>
+                <ul class="list-group" data-bind="foreach: restaurantList">
+                    <li class="list-group-item" data-bind="click: $parent.selectedFromList">
+                        <div class="name" data-bind="text: name"></div>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+    </div>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=MYKEY"></script>

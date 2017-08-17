@@ -1,9 +1,25 @@
+h1 {
+    margin-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+body {
+    background-color: antiquewhite;
+}
 .hidden {
     display: none;
+}
+
+.info-window {
+    height: 50px;
+    width: 50px;
+    background-color: black;
 }
 
 #googleMap {
     float: left;
     height: 400px;
-    width: 70%;
+    margin-bottom: 20px;
 }
+
