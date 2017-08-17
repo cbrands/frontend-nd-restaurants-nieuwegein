@@ -35,8 +35,8 @@ let ViewModel = function () {
     this.numberOfRestaurants = restaurants.length;
 
     this.restaurantList = ko.observableArray([]);
-
-    this.markerList = [];
+    
+    this.markers = new ko.observableArray();
 
     this.query = ko.observable("");
 
@@ -61,7 +61,7 @@ let ViewModel = function () {
         self.addMarkers();
     }
 
-    // This function loops over all thhe restaurants and uses the name and address of the 
+    // This function loops over all the restaurants and uses the name and address of the 
     // restaurant to create a marker
     this.addMarkers = function() {
         for (let i = 0; i < self.numberOfRestaurants; i++) {
@@ -82,9 +82,9 @@ let ViewModel = function () {
                     // Create a clicklistener for this marker
                     self.addClickListener(marker);
 
-                    // add the marker to a markerList so we can easely access the marker
+                    // add the marker to a markers observable array so we can easely access the marker
                     // from other functions
-                    self.markerList.push(marker);
+                    self.markers.push(marker);
                 } else {
                     console.log('Geocode was not successful for the following reason: ' + status);
                 }
@@ -141,10 +141,10 @@ let ViewModel = function () {
     // the others are colored red
     this.highlightSelectedMarker = function(selectedName) {
         for(var i = 0; i < self.numberOfRestaurants; i++) {
-            if(self.markerList[i].getTitle() === selectedName) {
-                self.markerList[i].setIcon(self.pinSymbol('blue'));
+            if(self.markers()[i].getTitle() === selectedName) {
+                self.markers()[i].setIcon(self.pinSymbol('blue'));
             } else {
-                self.markerList[i].setIcon(self.pinSymbol('red'));
+                self.markers()[i].setIcon(self.pinSymbol('red'));
             }
         }
     }
@@ -170,10 +170,10 @@ let ViewModel = function () {
         // Loop over all the markers. If the title matches the query set it to visible
         // otherwise make it invisible
         for(var i = 0; i < self.numberOfRestaurants; i++) {
-            if(self.markerList[i].getTitle().toLocaleLowerCase().search(queryLow) < 0) {
-                self.markerList[i].setVisible(false);
+            if(self.markers()[i].getTitle().toLocaleLowerCase().search(queryLow) < 0) {
+                self.markers()[i].setVisible(false);
             } else {
-                self.markerList[i].setVisible(true);
+                self.markers()[i].setVisible(true);
             }
         }
     }
