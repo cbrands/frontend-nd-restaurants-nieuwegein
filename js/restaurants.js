@@ -207,6 +207,7 @@ init = () => {
                 let selectedName = marker.getTitle();
                 self.highlightSelectedItem(selectedName);
                 self.highlightSelectedMarker(selectedName);
+                self.map.setCenter(marker.getPosition());
             });
         };
 
