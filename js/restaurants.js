@@ -24,8 +24,8 @@ init = () => {
         let self = this;
 
         this.fsUrl = 'https://api.foursquare.com/v2/venues/search?';
-        this.clientId = 'XLWYD0NUX2UPCCUGAFRTA0FRUR5ITQ550MDC35HBXP5RGJF5';
-        this.clientSecret = 'CK4XGZHWFJ1CA4USGFPKD5D3ZYGVJDADX0IO3SJTXAKXKIPR';
+        this.clientId = 'YOURCLIENTID';
+        this.clientSecret = 'YOURCLIENTSECRET';
 
         this.numberOfRestaurants = restaurants.length;
 
